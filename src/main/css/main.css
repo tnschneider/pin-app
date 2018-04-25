@@ -3,8 +3,17 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 48px;
+    width: 52px;
     z-index: 100;
+}
+
+.left-nav button {
+    background-color: white;
+    margin: 4px!important;
+}
+
+.left-nav img {
+    background-color: white;
 }
 
 .top-nav {
@@ -19,7 +28,7 @@
 .top-nav-ghost {
     position: fixed;
     top: 0;
-    left: calc(50% + 24px);
+    left: calc(50% + 26px);
     transform: translate(-50%, 0);
     width: 144px;
     height: 48px;

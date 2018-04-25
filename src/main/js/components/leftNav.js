@@ -10,7 +10,7 @@ class LeftNav extends Component{
 				{this.props.sites.map((site, index) => {
 					let isActive = site.id === this.props.activeSiteId;
 					return (
-						<FloatingActionButton key={index} mini={true} style={{ padding: '4px' }}>
+						<FloatingActionButton key={index} mini={true} onClick={() => { this.props.setActiveSiteId(site.id); }}>
 							<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } />
 						</FloatingActionButton>
 					)

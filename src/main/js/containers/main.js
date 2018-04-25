@@ -9,13 +9,13 @@ import WebviewSwitcher from '../components/webviewSwitcher.js';
 
 class Main extends Component {
 	componentDidMount() {
-		this.props.addSite({ url: "https://www.google.com" })
+		this.props.addSite({ url: "https://propak.visualstudio.com" })
 	}
 
 	render() {
 		return(
 			<div>
-				<LeftNav sites={this.props.sites} activeSiteId={this.props.activeSiteId} />
+				<LeftNav sites={this.props.sites} activeSiteId={this.props.activeSiteId} setActiveSiteId={this.props.setActiveSiteId} />
 				<TopNav />
 				<WebviewSwitcher sites={this.props.sites} activeSiteId={this.props.activeSiteId} />
 			</div>

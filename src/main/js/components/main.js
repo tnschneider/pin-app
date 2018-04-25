@@ -11,7 +11,6 @@ class Main extends Component {
 					title="Title"
 					iconClassNameRight="muidocs-icon-navigation-expand-more"
 				/>
-				<webview src="http://www.google.com" style={{ height: '100%', width: '100%' }}></webview>
 			</Paper>
 		)
 	}

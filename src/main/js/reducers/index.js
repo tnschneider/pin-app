@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import Lists from './lists';
+import Sites from './sitesReducer.js';
+import Settings from './settingsReducer.js';
 
 const rootReducer = combineReducers({
-	lists: Lists
+	sites: Sites,
+	settings: Settings
 });
 
 export default rootReducer;

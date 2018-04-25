@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ViewItem from './containers/show_list_item';
 
-import Header from './components/header';
+import Settings from './components/settings';
 import Main from './components/main';
 
 import {
@@ -14,9 +13,8 @@ export default class extends Component {
 		return (
 			<Router>
 				<div>
-					<Header />
 					<Route exact path="/" component={Main} />
-					<Route path="/view/:name" component={ViewItem} />
+					<Route path="/settings" component={Settings} />
 				</div>
 			</Router>
 		)

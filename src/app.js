@@ -8,6 +8,18 @@ const Tray = electron.Tray;
 const path = require('path');
 const url = require('url');
 
+import Datastore from 'nedb';
+
+import Repository from './core/repository.js';
+import Constants from './core/constants.js';
+import { IpcServer } from './core/ipc.js';
+
+const db = new Datastore({ filename: Constants.DB_FILENAME, autoload: true });
+
+const repo = new Repository(db);
+
+const ipc = new IpcServer(repo);
+
 const {
 	default: installExtension, 
 	REACT_DEVELOPER_TOOLS, 
@@ -30,7 +42,7 @@ function createWindow() {
 	var contextMenu = Menu.buildFromTemplate([
 			{ label: 'Quit', click: () => {
 				app.isQuitting = true;
-        app.quit();
+        		app.quit();
 			} }
 	]);
 	tray.setToolTip('Pin App');
@@ -40,12 +52,12 @@ function createWindow() {
 	})
 
 	mainWindow.loadURL(url.format({
-		pathname: path.join(__dirname, 'index.html'),
+		pathname: path.join(__dirname, './main/index.html'),
 		protocol: 'file:',
 		slashes: true,
 	}));
 
-  if(process.env.NODE_ENV === 'development') {
+  	if(process.env.NODE_ENV === 'development') {
 
 		mainWindow.webContents.openDevTools();
 		
@@ -61,36 +73,36 @@ function createWindow() {
 
 	//hide the app to the tray on minimize
 	mainWindow.on('minimize',function(event){
-    event.preventDefault();
-    mainWindow.hide();
+		event.preventDefault();
+		mainWindow.hide();
 	});
 	
 	//hide the app to the tray on close
 	mainWindow.on('close', function (event) {
-    if(!app.isQuitting){
-        event.preventDefault();
-        mainWindow.hide();
-    }
+		if(!app.isQuitting){
+			event.preventDefault();
+			mainWindow.hide();
+		}
 
-    return false;
+		return false;
 	});
 
-  mainWindow.on('closed', function() {
+  	mainWindow.on('closed', function() {
 		mainWindow = null;
-  });
+  	});
 }
 
 app.on('ready', createWindow);
 
 //leave the app running on mac os only
 app.on('window-all-closed', function() {
-  if (process.platform !== 'darwin') {
+  	if (process.platform !== 'darwin') {
 		app.quit();
-  }
+  	}
 });
 
 app.on('activate', function() {
-  if (mainWindow === null) {
+  	if (mainWindow === null) {
 		createWindow();
-  }
+  	}
 });

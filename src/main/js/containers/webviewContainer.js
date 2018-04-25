@@ -11,6 +11,10 @@ class WebviewContainer extends Component{
 			)
 		});
 	}
+	
+	componentDidMount() {
+		//maybe put some stuff here
+	}
 
 	render(){
 		let activeSite = this.props.sites.find(x => x.id === this.props.activeSiteId);

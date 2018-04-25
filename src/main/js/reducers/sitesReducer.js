@@ -3,7 +3,7 @@ import { ADD_SITE, DELETE_SITE, SET_ACTIVE_SITE_ID } from '../actions/siteAction
 
 const sites = IpcClient.getSites();
 
-const INITIAL_STATE = { sites: sites, activeSiteId: sites.length > 0 ? sites[0].id : null };
+const INITIAL_STATE = { sites: sites || [], activeSiteId: sites.length > 0 ? sites[0].id : null };
 
 export default function(state = INITIAL_STATE, action) {
 	switch(action.type) {

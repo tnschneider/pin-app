@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Settings from './components/settings';
-import Main from './components/main';
+import Settings from './containers/settings';
+import Main from './containers/main';
 
 import {
   HashRouter as Router,

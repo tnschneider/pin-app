@@ -28,7 +28,6 @@ class Repository {
                 }
             });
         });
-        
     }
 
     deleteSite(id) {

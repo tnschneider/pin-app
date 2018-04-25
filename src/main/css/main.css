@@ -1,0 +1,32 @@
+.left-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 48px;
+    z-index: 100;
+}
+
+.top-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -80%;
+    height: 100%;
+    z-index: 2;
+}
+
+.top-nav-ghost {
+    position: fixed;
+    top: 0;
+    left: calc(50% + 24px);
+    transform: translate(-50%, 0);
+    width: 144px;
+    height: 48px;
+    z-index: 1;
+}
+
+.top-nav-ghost:hover .top-nav {
+    top: 0;
+}
+				

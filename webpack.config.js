@@ -51,7 +51,8 @@ const getAppPlugins = (isProd) => {
 
 const config = {
 	context: path.resolve(__dirname),
-	target: "electron",
+	target: "electron-renderer",
+	mode: isProd ? 'production' : 'development',
 	devtool: isProd ? 'source-map' : 'inline-source-map',
 	resolve: {
 		alias: {
@@ -68,7 +69,7 @@ const config = {
 		publicPath: isProd ? '/' : 'http://localhost:8080/'
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				exclude: /node_modules/,
 				test : /\.js$/,

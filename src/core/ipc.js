@@ -1,4 +1,5 @@
 const { ipcMain, ipcRenderer } = require('electron');
+const { Site } = require('./models.js');
 
 const MessageTypes = {
     GET_SITES: 'GET_SITES',
@@ -46,31 +47,31 @@ class IpcServer {
 
 const IpcClient = {
     getSites: () => {
-        return this._send(MessageTypes.GET_SITES);
+        return IpcClient._send(MessageTypes.GET_SITES).map(x => new Site(x));
     },
 
     addSite: (site) => {
-        return this._send(MessageTypes.ADD_SITE, site);
+        return new Site(IpcClient._send(MessageTypes.ADD_SITE, site));
     },
 
     deleteSite: (id) => {
-        return this._send(MessageTypes.DELETE_SITE, id);
+        return IpcClient._send(MessageTypes.DELETE_SITE, id);
     },
 
     stashSite: (id) => {
-        return this._send(MessageTypes.STASH_SITE, id);
+        return IpcClient._send(MessageTypes.STASH_SITE, id);
     },
 
     unstashSite: (id) => {
-        return this._send(MessageTypes.UNSTASH_SITE, id);
+        return IpcClient._send(MessageTypes.UNSTASH_SITE, id);
     },
 
     getAppSettings: () => {
-        return this._send(MessageTypes.GET_APP_SETTINGS);
+        return IpcClient._send(MessageTypes.GET_APP_SETTINGS);
     },
 
     updateAppSettings: (appSettings) => {
-        return this._send(MessageTypes.UPDATE_APP_SETTINGS, appSettings);
+        return IpcClient._send(MessageTypes.UPDATE_APP_SETTINGS, appSettings);
     },
 
     _send: (type, payload) => {

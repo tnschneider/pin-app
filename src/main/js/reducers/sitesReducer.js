@@ -1,9 +1,7 @@
 import { IpcClient } from '../../../core/ipc.js';
 import { ADD_SITE, DELETE_SITE, SET_ACTIVE_SITE_ID } from '../actions/siteActions.js';
 
-const client = new IpcClient();
-
-const sites = client.getSites();
+const sites = IpcClient.getSites();
 
 const INITIAL_STATE = { sites: sites, activeSiteId: sites.length > 0 ? sites[0].id : null };
 

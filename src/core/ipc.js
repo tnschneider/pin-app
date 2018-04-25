@@ -44,36 +44,36 @@ class IpcServer {
     }
 }
 
-class IpcClient {
-    getSites() {
+const IpcClient = {
+    getSites: () => {
         return this._send(MessageTypes.GET_SITES);
-    }
+    },
 
-    addSite(site) {
+    addSite: (site) => {
         return this._send(MessageTypes.ADD_SITE, site);
-    }
+    },
 
-    deleteSite(id) {
+    deleteSite: (id) => {
         return this._send(MessageTypes.DELETE_SITE, id);
-    }
+    },
 
-    stashSite(id) {
+    stashSite: (id) => {
         return this._send(MessageTypes.STASH_SITE, id);
-    }
+    },
 
-    unstashSite(id) {
+    unstashSite: (id) => {
         return this._send(MessageTypes.UNSTASH_SITE, id);
-    }
+    },
 
-    getAppSettings() {
+    getAppSettings: () => {
         return this._send(MessageTypes.GET_APP_SETTINGS);
-    }
+    },
 
-    updateAppSettings(appSettings) {
+    updateAppSettings: (appSettings) => {
         return this._send(MessageTypes.UPDATE_APP_SETTINGS, appSettings);
-    }
+    },
 
-    _send(type, payload) {
+    _send: (type, payload) => {
         return ipcRenderer.sendSync(type, payload);
     }
 }

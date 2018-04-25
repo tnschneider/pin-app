@@ -3,9 +3,8 @@
   "version": "0.0.1",
   "description": "app to pin web pages",
   "scripts": {
-    "hot": "webpack-dev-server --color --config ./configs/webpack.dev.config.js",
-    "dev": "cross-env NODE_ENV=development electron ./app/src/main/app.js",
-    "prod": "webpack -p --progress --color --config ./configs/webpack.prod.config.js && electron ./app/build/app.js",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js\" \"cross-env NODE_ENV=development electron ./src/main/app.js\"",
+    "prod": "cross-env NODE_ENV=production webpack -p --progress --color --config ./webpack.config.js && electron ./build/app.js",
     "test": "jest"
   },
   "devDependencies": {
@@ -16,6 +15,7 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-1": "^6.22.0",
+    "concurrently": "^3.5.0",
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.1.4",
     "electron": "^1.6.2",
@@ -24,6 +24,7 @@
     "eslint": "^3.17.1",
     "eslint-config-google": "^0.7.1",
     "jest": "^19.0.2",
+    "material-ui": "^0.20.0",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",

@@ -2,8 +2,7 @@
 bower_components
 node_modules
 dist
-app/build
-app/src/main/res
+build
 .vscode/
 
 #files

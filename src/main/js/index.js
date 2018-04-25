@@ -7,13 +7,21 @@ import Root from './routes'
 
 import store from './store'
 
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 const render = (Component) => {
 	ReactDOM.render(
+		
 		<AppContainer>
 			<Provider store={store}>
-				<Component />
+				<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+					<Component />
+				</MuiThemeProvider>
 			</Provider>
 		</AppContainer>,
+		
 		document.getElementById('root')
 	)
 }

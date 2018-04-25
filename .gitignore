@@ -4,6 +4,7 @@ node_modules
 dist
 app/build
 app/src/main/res
+.vscode/
 
 #files
 *.tgz

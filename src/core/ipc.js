@@ -1,51 +1,44 @@
-import { ipcMain, ipcRenderer } from 'electron';
+const { ipcMain, ipcRenderer } = require('electron');
 
 const MessageTypes = {
-    GET_SITES = 'GET_SITES',
-    ADD_SITE = 'ADD_SITE',
-    DELETE_SITE = 'DELETE_SITE',
-    STASH_SITE = 'STASH_SITE',
-    UNSTASH_SITE = 'UNSTASH_SITE',
-    GET_APP_SETTINGS = 'GET_APP_SETTINGS',
-    UPDATE_APP_SETTINGS = 'UPDATE_APP_SETTINGS'
+    GET_SITES: 'GET_SITES',
+    ADD_SITE: 'ADD_SITE',
+    DELETE_SITE: 'DELETE_SITE',
+    STASH_SITE: 'STASH_SITE',
+    UNSTASH_SITE: 'UNSTASH_SITE',
+    GET_APP_SETTINGS: 'GET_APP_SETTINGS',
+    UPDATE_APP_SETTINGS: 'UPDATE_APP_SETTINGS'
 }
 
 class IpcServer {
-    constructor(props) {
-        this.repo = props.repo;
+    constructor(repo) {
+        this.repo = repo;
         
-        ipcMain.on(MessageTypes.GET_SITES, function(event, arg) {
-            //this.repo.doSomething(arg);
+        ipcMain.on(MessageTypes.GET_SITES, async (event) => {
+            event.returnValue = await this.repo.getSites();
+        });
+    
+        ipcMain.on(MessageTypes.ADD_SITE, async (event, site) => {
+            event.returnValue = await this.repo.addSite(site);
+        });
+    
+        ipcMain.on(MessageTypes.DELETE_SITE, async (event, id) => {
+            event.returnValue = await this.repo.deleteSite(id);
+        });
+    
+        ipcMain.on(MessageTypes.STASH_SITE, (event, id) => {
             event.returnValue = true;
         });
     
-        ipcMain.on(MessageTypes.ADD_SITE, function(event, arg) {
-            //this.repo.doSomething(arg);
+        ipcMain.on(MessageTypes.UNSTASH_SITE, (event, id) => {
             event.returnValue = true;
         });
     
-        ipcMain.on(MessageTypes.DELETE_SITE, function(event, arg) {
-            //this.repo.doSomething(arg);
+        ipcMain.on(MessageTypes.GET_APP_SETTINGS, (event) => {
             event.returnValue = true;
         });
     
-        ipcMain.on(MessageTypes.STASH_SITE, function(event, arg) {
-            //this.repo.doSomething(arg);
-            event.returnValue = true;
-        });
-    
-        ipcMain.on(MessageTypes.UNSTASH_SITE, function(event, arg) {
-            //this.repo.doSomething(arg);
-            event.returnValue = true;
-        });
-    
-        ipcMain.on(MessageTypes.GET_APP_SETTINGS, function(event, arg) {
-            //this.repo.doSomething(arg);
-            event.returnValue = true;
-        });
-    
-        ipcMain.on(MessageTypes.UPDATE_APP_SETTINGS, function(event, arg) {
-            //this.repo.doSomething(arg);
+        ipcMain.on(MessageTypes.UPDATE_APP_SETTINGS, (event, appSettings) => {
             event.returnValue = true;
         });
     }
@@ -53,35 +46,39 @@ class IpcServer {
 
 class IpcClient {
     getSites() {
-        return ipcRenderer.sendSync(MessageTypes.GET_SITES);
+        return this._send(MessageTypes.GET_SITES);
     }
 
     addSite(site) {
-        return ipcRenderer.sendSync(MessageTypes.ADD_SITE, { site: site });
+        return this._send(MessageTypes.ADD_SITE, site);
     }
 
-    deleteSite(site) {
-        return ipcRenderer.sendSync(MessageTypes.DELETE_SITE, { site: site });
+    deleteSite(id) {
+        return this._send(MessageTypes.DELETE_SITE, id);
     }
 
-    stashSite(site) {
-        return ipcRenderer.sendSync(MessageTypes.STASH_SITE, { site: site });
+    stashSite(id) {
+        return this._send(MessageTypes.STASH_SITE, id);
     }
 
-    unstashSite(site) {
-        return ipcRenderer.sendSync(MessageTypes.UNSTASH_SITE, { site: site });
+    unstashSite(id) {
+        return this._send(MessageTypes.UNSTASH_SITE, id);
     }
 
     getAppSettings() {
-        return ipcRenderer.sendSync(MessageTypes.GET_APP_SETTINGS);
+        return this._send(MessageTypes.GET_APP_SETTINGS);
     }
 
-    updateAppSettings(site) {
-        return ipcRenderer.sendSync(MessageTypes.UPDATE_APP_SETTINGS, { appSettings: appSettings });
+    updateAppSettings(appSettings) {
+        return this._send(MessageTypes.UPDATE_APP_SETTINGS, appSettings);
+    }
+
+    _send(type, payload) {
+        return ipcRenderer.sendSync(type, payload);
     }
 }
 
-export {
+module.exports = {
     IpcServer,
     IpcClient
 }

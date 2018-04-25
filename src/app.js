@@ -8,23 +8,26 @@ const Tray = electron.Tray;
 const path = require('path');
 const url = require('url');
 
-import Datastore from 'nedb';
-
-import Repository from './core/repository.js';
-import Constants from './core/constants.js';
-import { IpcServer } from './core/ipc.js';
-
-const db = new Datastore({ filename: Constants.DB_FILENAME, autoload: true });
-
-const repo = new Repository(db);
-
-const ipc = new IpcServer(repo);
-
 const {
 	default: installExtension, 
 	REACT_DEVELOPER_TOOLS, 
 	REDUX_DEVTOOLS
 } = require('electron-devtools-installer');
+
+const Datastore = require('nedb');
+
+const Repository = require('./core/repository.js');
+const Constants = require('./core/constants.js');
+const { IpcServer } = require('./core/ipc.js');
+
+const db = {
+	sites: new Datastore({ filename: Constants.DB_FILENAME_SITES, autoload: true }),
+	settings: new Datastore({ filename: Constants.DB_FILENAME_SETTINGS, autoload: true })
+};
+
+const repo = new Repository(db);
+
+const _ = new IpcServer(repo);
 
 let mainWindow;
 

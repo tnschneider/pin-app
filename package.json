@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "app to pin web pages",
   "scripts": {
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js\" \"cross-env NODE_ENV=development electron ./src/main/app.js\"",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js\" \"cross-env NODE_ENV=development electron ./src/app.js\"",
     "prod": "cross-env NODE_ENV=production webpack -p --progress --color --config ./webpack.config.js && electron ./build/app.js",
     "test": "jest"
   },

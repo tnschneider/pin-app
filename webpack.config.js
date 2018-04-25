@@ -24,7 +24,7 @@ const getAppPlugins = (isProd) => {
 		new webpack.NamedModulesPlugin(),
 		new CopyWebpackPlugin([
             {
-                from: './src/main/app.js',
+                from: './src/app.js',
                 to: path.join(__dirname, './build')
             },
 			{
@@ -51,6 +51,7 @@ const getAppPlugins = (isProd) => {
 
 const config = {
 	context: path.resolve(__dirname),
+	target: "electron",
 	devtool: isProd ? 'source-map' : 'inline-source-map',
 	resolve: {
 		alias: {

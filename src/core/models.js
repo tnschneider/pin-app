@@ -5,7 +5,6 @@ class Site {
         this.id = props.id || props._id;
         this.url = props.url;
         this.stashed = props.stashed;
-        this.favicon = props.favicon;
     }
 
     hostname() {

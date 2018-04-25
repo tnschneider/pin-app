@@ -1,0 +1,11 @@
+#directories
+bower_components
+node_modules
+dist
+app/build
+app/src/main/res
+
+#files
+*.tgz
+*.log
+package-lock.json

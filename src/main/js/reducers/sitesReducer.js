@@ -8,15 +8,25 @@ const INITIAL_STATE = { sites: sites || [], activeSiteId: sites.length > 0 ? sit
 export default function(state = INITIAL_STATE, action) {
 	switch(action.type) {
 		case ADD_SITE:
-			state.sites.push(action.payload);
-			return Object.assign({}, state);
+			state.sites.push(action.payload)
+			return Object.assign({}, state, {
+				sites: state.sites
+		  	});
 		case DELETE_SITE:
-			let index = state.sites.find(x => x.id === action.payload);
-			if (index > -1) state.sites.splice(index, 1);
-			return Object.assign({}, state);
+
+			let newSiteId = state.activeSiteId !== action.payload 
+								? state.activeSiteId 
+								: (state.sites.find(x => x.id !== action.payload) || {}).id;
+
+			return Object.assign({}, state, {
+				activeSiteId: newSiteId,
+				sites: state.sites.filter(x => x.id !== action.payload)
+		  	});
 		case SET_ACTIVE_SITE_ID:
-			state.activeSiteId = action.payload;
-			return Object.assign({}, state);
+			return Object.assign({}, state, {
+				activeSiteId: action.payload
+		  	});
+		default:
+			return state;
 	}
-	return state;
 }

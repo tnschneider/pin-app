@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
 
-class WebviewSwitcher extends Component{
+class WebviewSwitcher extends Component {
+	constructor(props) {
+		super(props);
+
+		this.activeViewBack = () => {
+			document.querySelector('.webview').goBack();
+		}
+	
+		this.activeViewRefresh = () => {
+			document.querySelector('.webview').reload();
+		}
+	
+		this.activeViewForward = () => {
+			document.querySelector('.webview').goForward();
+		}
+	}
+
 	render(){
 		let activeSite = this.props.sites.find(x => x.id === this.props.activeSiteId);
 
@@ -15,9 +31,15 @@ class WebviewSwitcher extends Component{
 		return(
 			<div>
 				{this.props.sites.map((site, index) => {
-					let visibility = site.id === this.props.activeSiteId ? 'visible' : 'hidden';
+					let isActiveSite = site.id === this.props.activeSiteId;
+					let visibility = isActiveSite ? 'visible' : 'hidden';
+
 					return (
-						<webview src={site.url} key={index} style={{ visibility: visibility, position: 'fixed', top: 0, bottom: 0, left: 60, right: 0 }} />
+						<webview is="?" 
+								 src={site.url} 
+								 key={index} 
+								 class={`webview ${ isActiveSite ? 'active' : 'inactive' }`} 
+								 style={{ visibility: visibility, position: 'fixed', top: 0, bottom: 0, left: 52, right: 0 }} />
 					)
 				})}
 			</div>

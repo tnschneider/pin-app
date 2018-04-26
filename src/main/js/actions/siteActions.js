@@ -17,7 +17,7 @@ export function addSite(site) {
 }
 
 export function deleteSite(id) {
-	let deletedSite = client.deleteSite(id);
+	let deletedSite = IpcClient.deleteSite(id);
 	
 	return {
 		type: DELETE_SITE,

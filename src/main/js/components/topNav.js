@@ -10,9 +10,9 @@ class TopNav extends Component{
 		return(
 			<div className="top-nav-ghost">
 				<Card className="top-nav">
-					<IconButton><ArrowBack /></IconButton>
-					<IconButton><Refresh /></IconButton>
-					<IconButton><ArrowForward /></IconButton>
+					<IconButton onClick={() => { this.props.activePageBack(); }}><ArrowBack /></IconButton>
+					<IconButton onClick={() => { this.props.activePageRefresh(); }}><Refresh /></IconButton>
+					<IconButton onClick={() => { this.props.activePageForward(); }}><ArrowForward /></IconButton>
 				</Card>
 			</div>
 			

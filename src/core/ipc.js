@@ -5,8 +5,6 @@ const MessageTypes = {
     GET_SITES: 'GET_SITES',
     ADD_SITE: 'ADD_SITE',
     DELETE_SITE: 'DELETE_SITE',
-    STASH_SITE: 'STASH_SITE',
-    UNSTASH_SITE: 'UNSTASH_SITE',
     GET_APP_SETTINGS: 'GET_APP_SETTINGS',
     UPDATE_APP_SETTINGS: 'UPDATE_APP_SETTINGS'
 }
@@ -25,14 +23,6 @@ class IpcServer {
     
         ipcMain.on(MessageTypes.DELETE_SITE, async (event, id) => {
             event.returnValue = await this.repo.deleteSite(id);
-        });
-    
-        ipcMain.on(MessageTypes.STASH_SITE, (event, id) => {
-            event.returnValue = true;
-        });
-    
-        ipcMain.on(MessageTypes.UNSTASH_SITE, (event, id) => {
-            event.returnValue = true;
         });
     
         ipcMain.on(MessageTypes.GET_APP_SETTINGS, (event) => {
@@ -56,14 +46,6 @@ const IpcClient = {
 
     deleteSite: (id) => {
         return IpcClient._send(MessageTypes.DELETE_SITE, id);
-    },
-
-    stashSite: (id) => {
-        return IpcClient._send(MessageTypes.STASH_SITE, id);
-    },
-
-    unstashSite: (id) => {
-        return IpcClient._send(MessageTypes.UNSTASH_SITE, id);
     },
 
     getAppSettings: () => {

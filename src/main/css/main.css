@@ -3,7 +3,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 52px;
+    width: 48px;
     z-index: 100;
 }
 
@@ -13,11 +13,11 @@
 
 .left-nav .nav-button {
     z-index: 1;
-    margin: 6px;
+    margin: 4px;
 }
 
 .left-nav .nav-button.active {
-    transform: translateX(10px);
+    box-shadow: 0px 0px 1px 4px rgb(0, 151, 167)!important;
 }
 
 .top-nav {
@@ -32,7 +32,7 @@
 .top-nav-ghost {
     position: fixed;
     top: 0;
-    left: calc(50% + 26px);
+    left: calc(50% + 24px);
     transform: translate(-50%, 0);
     width: 144px;
     height: 48px;

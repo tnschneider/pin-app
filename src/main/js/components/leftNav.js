@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import { remote } from 'electron';
@@ -17,7 +20,8 @@ class LeftNav extends Component{
 		this.state = {
 			siteIdToDelete: null,
 			addNewIsOpen: false,
-			addNewUrl: null
+			addNewUrl: null,
+			siteButtonOffset: 0
 		}
 		
 
@@ -56,36 +60,44 @@ class LeftNav extends Component{
 		this.addNewUrlChanged = (e) => {
 			this.setState({ addNewUrl: e.target.value });
 		}
+
+		this.siteButtonPixels = () => this.props.sites.length * 48;
+
+		this.siteButtonOffsetPixels = () => this.state.siteButtonOffset * 48;
+
+		this.incrOffset = () => (this.state.siteButtonOffset < this.props.sites.length - 1) && this.setState({ siteButtonOffset: this.state.siteButtonOffset + 1 });
+
+		this.decrOffset = () => (this.state.siteButtonOffset > 0) && this.setState({ siteButtonOffset: this.state.siteButtonOffset - 1 });
 	}
 
 	render(){
 		const dialogActions = [
-			<FlatButton
-				label="Cancel"
-				primary={true}
-				onClick={this.cancelAddNew}
-			/>,
-			<FlatButton
-				label="Add"
-				primary={true}
-				onClick={this.doAddNew}
-			/>,
+			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} />,
+			<FlatButton label="Add" primary={true} onClick={this.doAddNew} />
 		]
 
 		return(
 			<Card className="left-nav">
-				{this.props.sites.map((site, index) => {
-					let isActive = site.id === this.props.activeSiteId;
-					return (
-						<FloatingActionButton key={index} 
-											  mini={true} 
-											  onClick={() => { this.props.setActiveSiteId(site.id); }}
-											  data-site-id={site.id}
-											  className={`nav-button ${isActive ? 'active' : 'inactive' }`}>
-							<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } data-site-id={site.id} />
-						</FloatingActionButton>
-					)
-				})}
+				<div>
+					<IconButton onClick={this.decrOffset}><ArrowUp/></IconButton>
+					<div style={{ maxHeight: 'calc(100vh - 144px)', overflow: 'hidden' }}>
+						<div style={{ position: 'relative',transform: `translateY(-${this.siteButtonOffsetPixels()}px)` }}>
+							{this.props.sites.map((site, index) => {
+								let isActive = site.id === this.props.activeSiteId;
+								return (
+									<FloatingActionButton key={index} 
+														mini={true} 
+														onClick={() => { this.props.setActiveSiteId(site.id); }}
+														data-site-id={site.id}
+														className={`nav-button ${isActive ? 'active' : 'inactive' }`}>
+										<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } data-site-id={site.id} />
+									</FloatingActionButton>
+								)
+							})}
+						</div>
+					</div>
+					<IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>
+				</div>
 				<FloatingActionButton mini={true} onClick={this.openAddNewDialog} className="nav-button">
 					<ContentAdd />
 				</FloatingActionButton>

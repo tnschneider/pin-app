@@ -39,7 +39,7 @@ class WebviewSwitcher extends Component {
 								 src={site.url} 
 								 key={index} 
 								 class={`webview ${ isActiveSite ? 'active' : 'inactive' }`} 
-								 style={{ visibility: visibility, position: 'fixed', top: 0, bottom: 0, left: 52, right: 0 }} />
+								 style={{ visibility: visibility, position: 'fixed', top: 0, bottom: 0, left: 48, right: 0 }} />
 					)
 				})}
 			</div>

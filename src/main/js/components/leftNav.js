@@ -35,6 +35,15 @@ class LeftNav extends Component{
 			}
 		}, false);
 
+		this.openAddNewDialog = () => { 
+			this.setState({ addNewIsOpen: true }, () => {
+				setTimeout(() => {
+					let input = document.getElementById('urlInput');
+					input.focus();
+				}, 200);
+			});
+		}
+
 		this.doAddNew = () => {
 			this.props.addSite(new Site({url: this.state.addNewUrl}));
 			this.setState({ addNewUrl: null, addNewIsOpen: false });
@@ -71,20 +80,26 @@ class LeftNav extends Component{
 						<FloatingActionButton key={index} 
 											  mini={true} 
 											  onClick={() => { this.props.setActiveSiteId(site.id); }}
-											  data-site-id={site.id}>
+											  data-site-id={site.id}
+											  className={`site-button ${isActive ? 'active' : 'inactive' }`}>
 							<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } data-site-id={site.id} />
 						</FloatingActionButton>
 					)
 				})}
-				<FloatingActionButton mini={true} 
-									  onClick={() => { this.setState({ addNewIsOpen: true }) }}>
+				<FloatingActionButton mini={true} onClick={this.openAddNewDialog}>
 					<ContentAdd />
 				</FloatingActionButton>
 				<Dialog title="Add New Site"
 						actions={dialogActions}
-						modal={true}
-						open={this.state.addNewIsOpen}>
-					<TextField floatingLabelText="Floating Label Text" hintText="https://www.example.org" onChange={this.addNewUrlChanged}></TextField>
+						open={this.state.addNewIsOpen}
+						contentStyle={{ maxWidth: '500px' }}
+						onRequestClose={(buttonClicked) => { if (!buttonClicked) this.cancelAddNew(); }}>
+					<TextField fullWidth={true}
+							   id="urlInput"
+							   type="url"
+							   floatingLabelText="URL" 
+							   hintText="https://www.example.org" 
+							   onChange={this.addNewUrlChanged}></TextField>
 				</Dialog>
 			</Card>
 		)

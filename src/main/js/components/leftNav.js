@@ -81,12 +81,12 @@ class LeftNav extends Component{
 											  mini={true} 
 											  onClick={() => { this.props.setActiveSiteId(site.id); }}
 											  data-site-id={site.id}
-											  className={`site-button ${isActive ? 'active' : 'inactive' }`}>
+											  className={`nav-button ${isActive ? 'active' : 'inactive' }`}>
 							<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } data-site-id={site.id} />
 						</FloatingActionButton>
 					)
 				})}
-				<FloatingActionButton mini={true} onClick={this.openAddNewDialog}>
+				<FloatingActionButton mini={true} onClick={this.openAddNewDialog} className="nav-button">
 					<ContentAdd />
 				</FloatingActionButton>
 				<Dialog title="Add New Site"

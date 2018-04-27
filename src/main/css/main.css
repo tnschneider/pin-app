@@ -7,13 +7,17 @@
     z-index: 100;
 }
 
-.left-nav button {
+.left-nav button, .left-nav img {
     background-color: white;
-    margin: 4px!important;
 }
 
-.left-nav img {
-    background-color: white;
+.left-nav .nav-button {
+    z-index: 1;
+    margin: 6px;
+}
+
+.left-nav .nav-button.active {
+    transform: translateX(10px);
 }
 
 .top-nav {
@@ -38,4 +42,3 @@
 .top-nav-ghost:hover .top-nav {
     top: 0;
 }
-				

@@ -13,6 +13,7 @@ class Page {
 
 class Settings {
     constructor(props) {
+        this.windowBounds = props.windowBounds;
     }
 }
 

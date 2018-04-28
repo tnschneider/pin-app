@@ -5,6 +5,7 @@ import routes from './routes';
 import { AppContainer } from 'react-hot-loader';
 import Root from './routes'
 import { ShortcutProvider } from './components/shortcutProvider.js';
+import ViewportSizeProvider from './components/viewportSizeProvider.js';
 
 import store from './store';
 
@@ -18,7 +19,9 @@ const render = (Component) => {
 			<Provider store={store}>
 				<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
 					<ShortcutProvider>
-						<Component />
+						<ViewportSizeProvider>
+							<Component />
+						</ViewportSizeProvider>
 					</ShortcutProvider>
 				</MuiThemeProvider>
 			</Provider>

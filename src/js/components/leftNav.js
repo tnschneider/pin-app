@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Card from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -12,6 +13,8 @@ import { remote } from 'electron';
 import { Site } from 'core/models.js';
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
+
+const SITE_BUTTON_HEIGHT = 48;
 
 class LeftNav extends Component{
 	constructor(props) {
@@ -65,21 +68,35 @@ class LeftNav extends Component{
 
 		this.siteButtonOffsetPixels = () => this.state.siteButtonOffset * 48;
 
-		this.incrOffset = () => (this.state.siteButtonOffset < this.props.sites.length - 1) && this.setState({ siteButtonOffset: this.state.siteButtonOffset + 1 });
+		this.siteButtonsOverflowing = () => this.context.viewportHeight < (this.props.sites.length + 3) * SITE_BUTTON_HEIGHT;
+
+		this.maxSitesCanFit = () => Math.max(Math.floor(this.context.viewportHeight / SITE_BUTTON_HEIGHT) - 3, 1);
+
+		this.incrOffset = () => (this.state.siteButtonOffset < this.props.sites.length - this.maxSitesCanFit()) && this.setState({ siteButtonOffset: this.state.siteButtonOffset + 1 });
 
 		this.decrOffset = () => (this.state.siteButtonOffset > 0) && this.setState({ siteButtonOffset: this.state.siteButtonOffset - 1 });
+
+		this.resetOffset = () => this.state.siteButtonOffset !== 0 && this.setState({ siteButtonOffset: 0 });
 	}
+
+	static contextTypes = {
+        viewportHeight: PropTypes.number.isRequired,
+        viewportWidth: PropTypes.number.isRequired
+    }
 
 	render(){
 		const dialogActions = [
 			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} />,
 			<FlatButton label="Add" primary={true} onClick={this.doAddNew} />
-		]
+		];
+
+		const scrollSites = this.siteButtonsOverflowing();
+		if (!scrollSites) this.resetOffset();
 
 		return(
 			<Card className="left-nav">
 				<div>
-					<IconButton onClick={this.decrOffset}><ArrowUp/></IconButton>
+					{scrollSites && <IconButton onClick={this.decrOffset}><ArrowUp/></IconButton>}
 					<div style={{ maxHeight: 'calc(100vh - 144px)', overflow: 'hidden' }}>
 						<div style={{ position: 'relative',transform: `translateY(-${this.siteButtonOffsetPixels()}px)` }}>
 							{this.props.sites.map((site, index) => {
@@ -96,7 +113,7 @@ class LeftNav extends Component{
 							})}
 						</div>
 					</div>
-					<IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>
+					{scrollSites && <IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>}
 				</div>
 				<FloatingActionButton mini={true} onClick={this.openAddNewDialog} className="nav-button">
 					<ContentAdd />

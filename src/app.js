@@ -62,23 +62,21 @@ const createWindow = async () => {
 	}
 
 	const settings = await repo.getSettings();
-	
+
 	const screenWorkArea = electron.screen.getPrimaryDisplay().workAreaSize;
 	const screenHeight = screenWorkArea.height;
 	const screenWidth = screenWorkArea.width;
 
 	const {
-		width,
-		height,
-		x, y
-	} = settings.windowBounds;
+		width = 1024,
+		height = 768,
+		x = 100, y = 100
+	} = (settings.windowBounds || {});
 
 	let newWidth = Math.min(width, screenWidth);
 	let newHeight = Math.min(height, screenHeight);
-	let newX = Math.max(Math.min(x, screenWidth - newWidth), 0);
-	let newY = Math.max(Math.min(y, screenHeight - newHeight), 0);
-
-	console.log(width, height, x, y, newWidth, newHeight, newX, newY);
+	let newX = Math.max(Math.min(x, screenWidth - newWidth - 100), 0);
+	let newY = Math.max(Math.min(y, screenHeight - newHeight - 100), 0);
 
 	mainWindow = new BrowserWindow({
 		width: newWidth, 

@@ -13,7 +13,7 @@
   "build": {
     "appId": "com.safety.pin.app",
     "productName": "Safety Pin",
-    "asar": false,
+    "asar": true,
     "files": [
       "build-assets/**/*",
       "node_modules/**/*",

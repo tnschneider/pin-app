@@ -2,12 +2,13 @@ const { Page } = require("./models");
 
 class Repository {
     constructor(db) {
-        this.db = db;
+        this.pages = db.pages;
+        this.settings = db.settings;
     }
 
     getPages() {
         return new Promise((resolve, reject) => {
-            this.db.pages.find({}, (err, pages) => {
+            this.pages.find({}, (err, pages) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -20,7 +21,7 @@ class Repository {
 
     addPage(page) {
         return new Promise((resolve, reject) => {
-            this.db.pages.insert(new Page(page), (err, newPage) => {
+            this.pages.insert(new Page(page), (err, newPage) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -32,7 +33,7 @@ class Repository {
 
     deletePage(id) {
         return new Promise((resolve, reject) => {
-            this.db.pages.remove({ _id: id }, {}, (err, numRemoved) => {
+            this.pages.remove({ _id: id }, {}, (err, numRemoved) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -40,6 +41,18 @@ class Repository {
                 }
             });
         });
+    }
+
+    getSettings() {
+        return this.settings.get();
+    }
+
+    setSettings(payload) {
+        return this.settings.set(payload);
+    }
+
+    patchSettings(payload) {
+        return this.settings.patch(payload);
     }
 }
 

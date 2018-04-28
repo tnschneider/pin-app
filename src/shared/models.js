@@ -11,13 +11,12 @@ class Page {
     }
 }
 
-class AppSettings {
+class Settings {
     constructor(props) {
-
     }
 }
 
 module.exports = {
     Page,
-    AppSettings
+    Settings
 }

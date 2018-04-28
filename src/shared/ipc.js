@@ -6,7 +6,8 @@ const MessageTypes = {
     ADD_PAGE: 'ADD_PAGE',
     DELETE_PAGE: 'DELETE_PAGE',
     GET_APP_SETTINGS: 'GET_APP_SETTINGS',
-    UPDATE_APP_SETTINGS: 'UPDATE_APP_SETTINGS'
+    SET_APP_SETTINGS: 'SET_APP_SETTINGS',
+    PATCH_APP_SETTINGS: 'PATCH_APP_SETTINGS'
 }
 
 class IpcServer {
@@ -25,12 +26,16 @@ class IpcServer {
             event.returnValue = await this.repo.deletePage(id);
         });
     
-        ipcMain.on(MessageTypes.GET_APP_SETTINGS, (event) => {
-            event.returnValue = true;
+        ipcMain.on(MessageTypes.GET_APP_SETTINGS, async (event) => {
+            event.returnValue = await this.repo.getSettings();
         });
     
-        ipcMain.on(MessageTypes.UPDATE_APP_SETTINGS, (event, appSettings) => {
-            event.returnValue = true;
+        ipcMain.on(MessageTypes.SET_APP_SETTINGS, async (event, appSettings) => {
+            event.returnValue = await this.repo.setSettings(appSettings);
+        });
+
+        ipcMain.on(MessageTypes.PATCH_APP_SETTINGS, async (event, appSettings) => {
+            event.returnValue = await this.repo.patchSettings(appSettings);
         });
     }
 }
@@ -52,8 +57,12 @@ const IpcClient = {
         return IpcClient._send(MessageTypes.GET_APP_SETTINGS);
     },
 
-    updateAppSettings: (appSettings) => {
-        return IpcClient._send(MessageTypes.UPDATE_APP_SETTINGS, appSettings);
+    setAppSettings: (appSettings) => {
+        return IpcClient._send(MessageTypes.SET_APP_SETTINGS, appSettings);
+    },
+
+    patchAppSettings: (appSettings) => {
+        return IpcClient._send(MessageTypes.PATCH_APP_SETTINGS, appSettings);
     },
 
     _send: (type, payload) => {

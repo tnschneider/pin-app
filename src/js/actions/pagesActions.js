@@ -9,6 +9,7 @@ const actionResult = (type, payload) => ({
 //action types
 export const ADD_PAGE = 'ADD_PAGE';
 export const DELETE_PAGE = 'DELETE_PAGE';
+export const UPDATE_PAGE_URL = 'UPDATE_PAGE_URL';
 export const SET_ACTIVE_PAGE_ID = 'SET_ACTIVE_PAGE_ID';
 export const SET_ACTIVE_PAGE_BY_INDEX = 'SET_ACTIVE_PAGE_BY_INDEX';
 export const ACTIVE_PAGE_INCR = 'ACTIVE_PAGE_INCR';
@@ -26,6 +27,12 @@ export function deletePage(id) {
 	let deletedPage = IpcClient.deletePage(id);
 	
 	return actionResult(DELETE_PAGE, id);
+}
+
+export function updatePageUrl(id, url) {
+	IpcClient.updatePageUrl(id, url);
+
+	return actionResult(UPDATE_PAGE_URL, { id, url });
 }
 
 export function setActivePageId(id) {

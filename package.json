@@ -24,13 +24,15 @@
       "output": "dist/"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "./build-assets/icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "deleteAppDataOnUninstall": true,
-      "createDesktopShortcut": false
+      "createDesktopShortcut": false,
+      "installerIcon": "./build-assets/icon.ico"
     },
     "linux": {
       "target": [

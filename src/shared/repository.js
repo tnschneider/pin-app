@@ -43,6 +43,18 @@ class Repository {
         });
     }
 
+    updatePageUrl(id, url) {
+        return new Promise((resolve, reject) => {
+            this.pages.update({ _id: id }, { $set: { url: url } }, (err, numReplaced) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(numReplaced);
+                }
+            });
+        })
+    }
+
     getSettings() {
         return this.settings.get();
     }

@@ -4,19 +4,21 @@ import { ADD_PAGE,
 		 SET_ACTIVE_PAGE_ID,
 		 SET_ACTIVE_PAGE_BY_INDEX,
 		 ACTIVE_PAGE_INCR,
-		 ACTIVE_PAGE_DECR } from '../actions/pagesActions.js';
+		 ACTIVE_PAGE_DECR, 
+         UPDATE_PAGE_URL} from '../actions/pagesActions.js';
 
 const pages = IpcClient.getPages();
 
 const INITIAL_STATE = { pages: pages || [], activePageId: pages.length > 0 ? pages[0].id : null };
 
 export default function(state = INITIAL_STATE, action) {
+	const oldState = state;
 
-	const updateState = (newState) => Object.assign({}, state, newState);
+	const updateState = (newState) => Object.assign({}, oldState, newState);
 
-	const getPageIdFromIndex = (index) => state.pages[index].id;
+	const getPageIdFromIndex = (index) => oldState.pages[index].id;
 
-	const getActivePageIndex = () => state.pages.findIndex(x => x.id === state.activePageId);
+	const getActivePageIndex = () => oldState.pages.findIndex(x => x.id === oldState.activePageId);
 
 	let index;
 
@@ -34,6 +36,12 @@ export default function(state = INITIAL_STATE, action) {
 				activePageId: newPageId,
 				pages: state.pages.filter(x => x.id !== action.payload)
 			});
+
+		case UPDATE_PAGE_URL:
+			let updatedPage = state.pages.find(x => x.id === action.payload.id);
+			if (updatedPage) updatedPage.url == action.payload.url;
+
+			return updateState({ pages: state.pages });
 			  
 		case SET_ACTIVE_PAGE_ID:
 			return updateState({ activePageId: action.payload });

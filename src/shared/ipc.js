@@ -7,7 +7,8 @@ const MessageTypes = {
     DELETE_PAGE: 'DELETE_PAGE',
     GET_APP_SETTINGS: 'GET_APP_SETTINGS',
     SET_APP_SETTINGS: 'SET_APP_SETTINGS',
-    PATCH_APP_SETTINGS: 'PATCH_APP_SETTINGS'
+    PATCH_APP_SETTINGS: 'PATCH_APP_SETTINGS',
+    UPDATE_PAGE_URL: 'UPDATE_PAGE_URL'
 }
 
 class IpcServer {
@@ -24,6 +25,10 @@ class IpcServer {
     
         ipcMain.on(MessageTypes.DELETE_PAGE, async (event, id) => {
             event.returnValue = await this.repo.deletePage(id);
+        });
+
+        ipcMain.on(MessageTypes.UPDATE_PAGE_URL, async (event, payload) => {
+            event.returnValue = await this.repo.updatePageUrl(payload.id, payload.url);
         });
     
         ipcMain.on(MessageTypes.GET_APP_SETTINGS, async (event) => {
@@ -51,6 +56,10 @@ const IpcClient = {
 
     deletePage: (id) => {
         return IpcClient._send(MessageTypes.DELETE_PAGE, id);
+    },
+
+    updatePageUrl: (id, url) => {
+        return IpcClient._send(MessageTypes.UPDATE_PAGE_URL, { id, url });
     },
 
     getAppSettings: () => {

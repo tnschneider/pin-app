@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPages, addPage, setActivePageId, 
-		 deletePage, setActivePageByIndex, 
+		 deletePage, updatePageUrl, setActivePageByIndex, 
 		 activePageIncrement, activePageDecrement } from '../actions/pagesActions.js';
 import { Link } from 'react-router-dom';
 import LeftNav from '../components/leftNav.js';
@@ -47,7 +47,14 @@ class Main extends Component {
 		}
 
 		this.doAddNew = () => {
-			this.props.addPage(new Page({url: this.state.addNewUrl}));
+			let url = this.state.addNewUrl;
+
+			if (!url.includes("://")) {
+				url = `https://${url}`;
+			}
+
+			this.props.addPage(new Page({url: url}));
+
 			this.setState({ addNewUrl: null, addNewIsOpen: false });
 		}
 
@@ -80,6 +87,10 @@ class Main extends Component {
 				this.doAddNew();
 			}
 		}
+
+		this.handlePageNavigated = (pageId, url) => {
+			this.props.updatePageUrl(pageId, url);
+		}
 	}
 
 	render() {
@@ -108,7 +119,9 @@ class Main extends Component {
 
 					<WebviewSwitcher ref={this.switcher} 
 									pages={this.props.pages} 
-									activePageId={this.props.activePageId} />
+									activePageId={this.props.activePageId}
+									openAddNew={this.openAddNewDialog}
+									onPageNavigated={this.handlePageNavigated}/>
 				</Shortcuts>
 				<Dialog title="Add New Page"
 						actions={dialogActions}
@@ -141,6 +154,7 @@ let mapDispatch = dispatch => {
 		getPages: () => { dispatch(getPages()) },
 		setActivePageId: (id) => { dispatch(setActivePageId(id)) },
 		deletePage: (id) => { dispatch(deletePage(id)) },
+		updatePageUrl: (id, url) => { dispatch(updatePageUrl(id, url)) },
 		setActivePageByIndex: (index) => { dispatch(setActivePageByIndex(index)) },
 		activePageIncrement: () => { dispatch(activePageIncrement()) },
 		activePageDecrement: () => { dispatch(activePageDecrement()) }

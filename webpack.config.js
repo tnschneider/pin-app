@@ -27,13 +27,13 @@ const getAppPlugins = (isProd) => {
     let result = [
 		new webpack.NamedModulesPlugin(),
 		new CopyWebpackPlugin([
-			copyToDistAssets('./src/index.js'),
+			copyToDistAssets('./src/app.js'),
 			copyToDistAssets('./assets'),
 			copyToDistAssets('./src/index.html'),
 			copyToDistAssets('./src/bootstrap.js'),
             copyToDistAssets('./src/css', 'css'),
             copyToDistAssets('./src/fonts', 'fonts'),
-            copyToDistAssets('./src/core', 'core')
+            copyToDistAssets('./src/shared', 'shared')
         ]),
     ];
     
@@ -59,7 +59,7 @@ module.exports = (env) => {
 			alias: {
 				'js': path.resolve(__dirname, 'src/js'),
 				'css': path.resolve(__dirname, 'src/css'),
-				'core': path.resolve(__dirname, 'src/core')
+				'shared': path.resolve(__dirname, 'src/shared')
 			}
 		},
 		output: {

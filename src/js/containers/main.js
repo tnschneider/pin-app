@@ -6,7 +6,7 @@ import { getSites, addSite, setActiveSiteId,
 import { Link } from 'react-router-dom';
 import LeftNav from '../components/leftNav.js';
 import TopNav from '../components/topNav.js';
-import { Site } from 'core/models.js';
+import { Site } from 'shared/models.js';
 import WebviewSwitcher from '../components/webviewSwitcher.js';
 import { Shortcuts } from 'react-shortcuts';
 import { buildHandlers } from '../components/shortcutProvider.js';

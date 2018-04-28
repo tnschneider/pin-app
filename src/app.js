@@ -33,9 +33,9 @@ if (!isProd) {
 
 const Datastore = require('nedb');
 
-const Repository = require('./core/repository.js');
-const Constants = require('./core/constants.js');
-const { IpcServer } = require('./core/ipc.js');
+const Repository = require('./shared/repository.js');
+const Constants = require('./shared/constants.js');
+const { IpcServer } = require('./shared/ipc.js');
 
 const getUserDataPath = (filePath) => path.join(app.getPath('userData'), filePath);
 
@@ -69,7 +69,7 @@ const createWindow = () => {
 	mainWindow = new BrowserWindow({
 		width: 1024, 
 		height: 768,
-		title: "Pin App",
+		title: "Safety Pin",
 		icon: getIconPath(256)
 	});
 
@@ -81,7 +81,7 @@ const createWindow = () => {
         		app.quit();
 			} }
 	]);
-	tray.setToolTip('Pin App');
+	tray.setToolTip('Safety Pin');
 	tray.setContextMenu(contextMenu);
 	tray.on('click', () => {
 		mainWindow.show();

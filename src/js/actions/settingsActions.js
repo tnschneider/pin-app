@@ -1,5 +1,5 @@
-import { IpcClient } from 'core/ipc.js';
-import { Site } from 'core/models.js';
+import { IpcClient } from 'shared/ipc.js';
+import { Site } from 'shared/models.js';
 
 //action types
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';

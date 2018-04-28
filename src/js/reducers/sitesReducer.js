@@ -1,4 +1,4 @@
-import { IpcClient } from 'core/ipc.js';
+import { IpcClient } from 'shared/ipc.js';
 import { ADD_SITE,
 		 DELETE_SITE,
 		 SET_ACTIVE_SITE_ID,

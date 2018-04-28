@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import NoSymbol from 'material-ui/svg-icons/notification/do-not-disturb';
+import RaisedButton from 'material-ui/RaisedButton';
+import {grey700} from 'material-ui/styles/colors';
+
 
 class WebviewSwitcher extends Component {
 	constructor(props) {
@@ -18,27 +22,31 @@ class WebviewSwitcher extends Component {
 	}
 
 	render(){
-		let activeSite = this.props.sites.find(x => x.id === this.props.activeSiteId);
+		let activePage = this.props.pages.find(x => x.id === this.props.activePageId);
 
-		if(!activeSite){
+		if(!activePage){
 			return(
-				<div>
-					<h3>Loading...</h3>
+				<div style={{ position: 'fixed', top: 0, left: '48px', right: 0, bottom: 0, backgroundColor: grey700 }}>
+					<div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', alignItems: 'center' }}>
+						<NoSymbol style={{ color: 'white', height: '120px', width: 'auto' }}></NoSymbol>
+						<span style={{ color: 'white', fontSize: '20px', fontFamily: 'Roboto, sans-serif', marginBottom: '10px' }}>No pages pinned</span>
+						<RaisedButton labelStyle={{ color: 'white' }} secondary={true} label="Pin a Page"></RaisedButton>
+					</div>
 				</div>
 			)
 		}
 
 		return(
 			<div>
-				{this.props.sites.map((site, index) => {
-					let isActiveSite = site.id === this.props.activeSiteId;
-					let visibility = isActiveSite ? 'visible' : 'hidden';
+				{this.props.pages.map((page, index) => {
+					let isActivePage = page.id === this.props.activePageId;
+					let visibility = isActivePage ? 'visible' : 'hidden';
 
 					return (
 						<webview is="?" 
-								 src={site.url} 
+								 src={page.url} 
 								 key={index} 
-								 class={`webview ${ isActiveSite ? 'active' : 'inactive' }`} 
+								 class={`webview ${ isActivePage ? 'active' : 'inactive' }`} 
 								 style={{ visibility: visibility, position: 'fixed', top: 0, bottom: 0, left: 48, right: 0 }} />
 					)
 				})}

@@ -10,45 +10,45 @@ import { remote } from 'electron';
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 
-const SITE_BUTTON_HEIGHT = 48;
+const PAGE_BUTTON_HEIGHT = 48;
 
 class LeftNav extends Component{
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			siteIdToDelete: null,
-			siteButtonOffset: 0
+			pageIdToDelete: null,
+			pageButtonOffset: 0
 		}
 		
 
 		this.contextMenu = new Menu();
-		this.contextMenu.append(new MenuItem({ label: 'Delete', click: () => { this.props.deleteSite(this.state.siteIdToDelete); } }));
+		this.contextMenu.append(new MenuItem({ label: 'Delete', click: () => { this.props.deletePage(this.state.pageIdToDelete); } }));
 
 		window.addEventListener('contextmenu', (e) => {
-			var siteId = e.target.getAttribute("data-site-id");
+			var pageId = e.target.getAttribute("data-page-id");
 
-			if (siteId) {
-				this.setState({siteIdToDelete: siteId}, () => {
+			if (pageId) {
+				this.setState({pageIdToDelete: pageId}, () => {
 					e.preventDefault();
 					this.contextMenu.popup(remote.getCurrentWindow());
 				});
 			}
 		}, false);
 
-		this.siteButtonPixels = () => this.props.sites.length * 48;
+		this.pageButtonPixels = () => this.props.pages.length * 48;
 
-		this.siteButtonOffsetPixels = () => this.state.siteButtonOffset * 48;
+		this.pageButtonOffsetPixels = () => this.state.pageButtonOffset * 48;
 
-		this.siteButtonsOverflowing = () => this.context.viewportHeight < (this.props.sites.length + 3) * SITE_BUTTON_HEIGHT;
+		this.pageButtonsOverflowing = () => this.context.viewportHeight < (this.props.pages.length + 3) * PAGE_BUTTON_HEIGHT;
 
-		this.maxSitesCanFit = () => Math.max(Math.floor(this.context.viewportHeight / SITE_BUTTON_HEIGHT) - 3, 1);
+		this.maxPagesCanFit = () => Math.max(Math.floor(this.context.viewportHeight / PAGE_BUTTON_HEIGHT) - 3, 1);
 
-		this.incrOffset = () => (this.state.siteButtonOffset < this.props.sites.length - this.maxSitesCanFit()) && this.setState({ siteButtonOffset: this.state.siteButtonOffset + 1 });
+		this.incrOffset = () => (this.state.pageButtonOffset < this.props.pages.length - this.maxPagesCanFit()) && this.setState({ pageButtonOffset: this.state.pageButtonOffset + 1 });
 
-		this.decrOffset = () => (this.state.siteButtonOffset > 0) && this.setState({ siteButtonOffset: this.state.siteButtonOffset - 1 });
+		this.decrOffset = () => (this.state.pageButtonOffset > 0) && this.setState({ pageButtonOffset: this.state.pageButtonOffset - 1 });
 
-		this.resetOffset = () => this.state.siteButtonOffset !== 0 && this.setState({ siteButtonOffset: 0 });
+		this.resetOffset = () => this.state.pageButtonOffset !== 0 && this.setState({ pageButtonOffset: 0 });
 	}
 
 	static contextTypes = {
@@ -57,30 +57,30 @@ class LeftNav extends Component{
     }
 
 	render(){
-		const scrollSites = this.siteButtonsOverflowing();
-		if (!scrollSites) this.resetOffset();
+		const scrollPages = this.pageButtonsOverflowing();
+		if (!scrollPages) this.resetOffset();
 
 		return(
 			<Card className="left-nav">
 				<div>
-					{scrollSites && <IconButton onClick={this.decrOffset}><ArrowUp/></IconButton>}
+					{scrollPages && <IconButton onClick={this.decrOffset}><ArrowUp/></IconButton>}
 					<div style={{ maxHeight: 'calc(100vh - 144px)', overflow: 'hidden' }}>
-						<div style={{ position: 'relative',transform: `translateY(-${this.siteButtonOffsetPixels()}px)` }}>
-							{this.props.sites.map((site, index) => {
-								let isActive = site.id === this.props.activeSiteId;
+						<div style={{ position: 'relative',transform: `translateY(-${this.pageButtonOffsetPixels()}px)` }}>
+							{this.props.pages.map((page, index) => {
+								let isActive = page.id === this.props.activePageId;
 								return (
 									<FloatingActionButton key={index} 
 														mini={true} 
-														onClick={() => { this.props.setActiveSiteId(site.id); }}
-														data-site-id={site.id}
+														onClick={() => { this.props.setActivePageId(page.id); }}
+														data-page-id={page.id}
 														className={`nav-button ${isActive ? 'active' : 'inactive' }`}>
-										<img src={ `https://api.statvoo.com/favicon/?url=${site.hostname()}` } data-site-id={site.id} />
+										<img src={ `https://api.statvoo.com/favicon/?url=${page.hostname()}` } data-page-id={page.id} />
 									</FloatingActionButton>
 								)
 							})}
 						</div>
 					</div>
-					{scrollSites && <IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>}
+					{scrollPages && <IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>}
 				</div>
 				<FloatingActionButton mini={true} onClick={this.props.openAddNew} className="nav-button">
 					<ContentAdd />

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getSites, addSite, setActiveSiteId, 
-		 deleteSite, setActiveSiteByIndex, 
-		 activeSiteIncrement, activeSiteDecrement } from '../actions/siteActions.js';
+import { getPages, addPage, setActivePageId, 
+		 deletePage, setActivePageByIndex, 
+		 activePageIncrement, activePageDecrement } from '../actions/pagesActions.js';
 import { Link } from 'react-router-dom';
 import LeftNav from '../components/leftNav.js';
 import TopNav from '../components/topNav.js';
-import { Site } from 'shared/models.js';
+import { Page } from 'shared/models.js';
 import WebviewSwitcher from '../components/webviewSwitcher.js';
 import { Shortcuts } from 'react-shortcuts';
 import { buildHandlers } from '../components/shortcutProvider.js';
@@ -47,7 +47,7 @@ class Main extends Component {
 		}
 
 		this.doAddNew = () => {
-			this.props.addSite(new Site({url: this.state.addNewUrl}));
+			this.props.addPage(new Page({url: this.state.addNewUrl}));
 			this.setState({ addNewUrl: null, addNewIsOpen: false });
 		}
 
@@ -60,19 +60,19 @@ class Main extends Component {
 		}
 
 		this.handleShortcuts = buildHandlers({
-			'SITE_0': () => this.props.setActiveSiteByIndex(0),
-			'SITE_1': () => this.props.setActiveSiteByIndex(1),
-			'SITE_2': () => this.props.setActiveSiteByIndex(2),
-			'SITE_3': () => this.props.setActiveSiteByIndex(3),
-			'SITE_4': () => this.props.setActiveSiteByIndex(4),
-			'SITE_5': () => this.props.setActiveSiteByIndex(5),
-			'SITE_6': () => this.props.setActiveSiteByIndex(6),
-			'SITE_7': () => this.props.setActiveSiteByIndex(7),
-			'SITE_8': () => this.props.setActiveSiteByIndex(8),
-			'SITE_9': () => this.props.setActiveSiteByIndex(9),
-			'SITE_BACK': () => this.props.activeSiteDecrement(),
-			'SITE_FORWARD': () => this.props.activeSiteIncrement(),
-			'SITE_ADD': () => this.openAddNewDialog()
+			'PAGE_0': () => this.props.setActivePageByIndex(0),
+			'PAGE_1': () => this.props.setActivePageByIndex(1),
+			'PAGE_2': () => this.props.setActivePageByIndex(2),
+			'PAGE_3': () => this.props.setActivePageByIndex(3),
+			'PAGE_4': () => this.props.setActivePageByIndex(4),
+			'PAGE_5': () => this.props.setActivePageByIndex(5),
+			'PAGE_6': () => this.props.setActivePageByIndex(6),
+			'PAGE_7': () => this.props.setActivePageByIndex(7),
+			'PAGE_8': () => this.props.setActivePageByIndex(8),
+			'PAGE_9': () => this.props.setActivePageByIndex(9),
+			'PAGE_BACK': () => this.props.activePageDecrement(),
+			'PAGE_FORWARD': () => this.props.activePageIncrement(),
+			'PAGE_ADD': () => this.openAddNewDialog()
 		});
 
 		this.handleAddNewKeyDown = (event) => {
@@ -83,6 +83,10 @@ class Main extends Component {
 	}
 
 	render() {
+		if (!this.props.activePageId && this.props.pages.length > 0) {
+			this.props.setActivePageId(this.props.pages[0].id);
+		}
+
 		const dialogActions = [
 			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} />,
 			<FlatButton label="Add" secondary={true} onClick={this.doAddNew} />
@@ -90,12 +94,12 @@ class Main extends Component {
 
 		return(
 			<div>
-				<Shortcuts name='SITES' handler={this.handleShortcuts}>
-					<LeftNav sites={this.props.sites} 
-							activeSiteId={this.props.activeSiteId} 
-							setActiveSiteId={this.props.setActiveSiteId}
-							addSite={this.props.addSite}
-							deleteSite={this.props.deleteSite} 
+				<Shortcuts name='PAGES' handler={this.handleShortcuts}>
+					<LeftNav pages={this.props.pages} 
+							activePageId={this.props.activePageId} 
+							setActivePageId={this.props.setActivePageId}
+							addPage={this.props.addPage}
+							deletePage={this.props.deletePage} 
 							openAddNew={this.openAddNewDialog}/>
 
 					<TopNav activePageBack={this.activePageBack}
@@ -103,10 +107,10 @@ class Main extends Component {
 							activePageForward={this.activePageForward}/>
 
 					<WebviewSwitcher ref={this.switcher} 
-									sites={this.props.sites} 
-									activeSiteId={this.props.activeSiteId} />
+									pages={this.props.pages} 
+									activePageId={this.props.activePageId} />
 				</Shortcuts>
-				<Dialog title="Add New Site"
+				<Dialog title="Add New Page"
 						actions={dialogActions}
 						open={this.state.addNewIsOpen}
 						contentStyle={{ maxWidth: '500px' }}
@@ -126,20 +130,20 @@ class Main extends Component {
 
 let mapState = state => {
 	return {
-		sites: state.sites.sites,
-		activeSiteId: state.sites.activeSiteId
+		pages: state.pages.pages,
+		activePageId: state.pages.activePageId
 	};
 }
 
 let mapDispatch = dispatch => {
 	return {
-		addSite: (site) => { dispatch(addSite(site)) },
-		getSites: () => { dispatch(getSites()) },
-		setActiveSiteId: (id) => { dispatch(setActiveSiteId(id)) },
-		deleteSite: (id) => { dispatch(deleteSite(id)) },
-		setActiveSiteByIndex: (index) => { dispatch(setActiveSiteByIndex(index)) },
-		activeSiteIncrement: () => { dispatch(activeSiteIncrement()) },
-		activeSiteDecrement: () => { dispatch(activeSiteDecrement()) }
+		addPage: (page) => { dispatch(addPage(page)) },
+		getPages: () => { dispatch(getPages()) },
+		setActivePageId: (id) => { dispatch(setActivePageId(id)) },
+		deletePage: (id) => { dispatch(deletePage(id)) },
+		setActivePageByIndex: (index) => { dispatch(setActivePageByIndex(index)) },
+		activePageIncrement: () => { dispatch(activePageIncrement()) },
+		activePageDecrement: () => { dispatch(activePageDecrement()) }
 	};
 }
 

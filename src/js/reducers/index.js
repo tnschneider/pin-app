@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import Sites from './sitesReducer.js';
+import Pages from './pagesReducer.js';
 import Settings from './settingsReducer.js';
 
 const rootReducer = combineReducers({
-	sites: Sites,
+	pages: Pages,
 	settings: Settings
 });
 

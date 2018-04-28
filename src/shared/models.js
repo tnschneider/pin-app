@@ -1,6 +1,6 @@
 const url = require('url');
 
-class Site {
+class Page {
     constructor(props) {
         this.id = props.id || props._id;
         this.url = props.url;
@@ -18,6 +18,6 @@ class AppSettings {
 }
 
 module.exports = {
-    Site,
+    Page,
     AppSettings
 }

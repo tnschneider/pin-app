@@ -1,38 +1,38 @@
-const { Site } = require("./models");
+const { Page } = require("./models");
 
 class Repository {
     constructor(db) {
         this.db = db;
     }
 
-    getSites() {
+    getPages() {
         return new Promise((resolve, reject) => {
-            this.db.sites.find({}, (err, sites) => {
+            this.db.pages.find({}, (err, pages) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(sites.map(x => new Site(x)));
+                    resolve(pages.map(x => new Page(x)));
                 }
             });
         })
         
     }
 
-    addSite(site) {
+    addPage(page) {
         return new Promise((resolve, reject) => {
-            this.db.sites.insert(new Site(site), (err, newSite) => {
+            this.db.pages.insert(new Page(page), (err, newPage) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(new Site(newSite));
+                    resolve(new Page(newPage));
                 }
             });
         });
     }
 
-    deleteSite(id) {
+    deletePage(id) {
         return new Promise((resolve, reject) => {
-            this.db.sites.remove({ _id: id }, {}, (err, numRemoved) => {
+            this.db.pages.remove({ _id: id }, {}, (err, numRemoved) => {
                 if (err) {
                     reject(err);
                 } else {

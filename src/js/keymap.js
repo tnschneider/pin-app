@@ -11,6 +11,7 @@ export default {
         SITE_8: "alt+9",
         SITE_9: "alt+0",
         SITE_BACK: "alt+left",
-        SITE_FORWARD: "alt+right"
+        SITE_FORWARD: "alt+right",
+        SITE_ADD: "alt+plus"
     }
 }

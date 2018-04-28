@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Card from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import { remote } from 'electron';
-import { Site } from 'core/models.js';
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 
@@ -22,8 +18,6 @@ class LeftNav extends Component{
 
 		this.state = {
 			siteIdToDelete: null,
-			addNewIsOpen: false,
-			addNewUrl: null,
 			siteButtonOffset: 0
 		}
 		
@@ -41,28 +35,6 @@ class LeftNav extends Component{
 				});
 			}
 		}, false);
-
-		this.openAddNewDialog = () => { 
-			this.setState({ addNewIsOpen: true }, () => {
-				setTimeout(() => {
-					let input = document.getElementById('urlInput');
-					input.focus();
-				}, 200);
-			});
-		}
-
-		this.doAddNew = () => {
-			this.props.addSite(new Site({url: this.state.addNewUrl}));
-			this.setState({ addNewUrl: null, addNewIsOpen: false });
-		}
-
-		this.cancelAddNew = () => {
-			this.setState({ addNewUrl: null, addNewIsOpen: false });
-		}
-
-		this.addNewUrlChanged = (e) => {
-			this.setState({ addNewUrl: e.target.value });
-		}
 
 		this.siteButtonPixels = () => this.props.sites.length * 48;
 
@@ -85,11 +57,6 @@ class LeftNav extends Component{
     }
 
 	render(){
-		const dialogActions = [
-			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} />,
-			<FlatButton label="Add" primary={true} onClick={this.doAddNew} />
-		];
-
 		const scrollSites = this.siteButtonsOverflowing();
 		if (!scrollSites) this.resetOffset();
 
@@ -115,21 +82,9 @@ class LeftNav extends Component{
 					</div>
 					{scrollSites && <IconButton onClick={this.incrOffset}><ArrowDown/></IconButton>}
 				</div>
-				<FloatingActionButton mini={true} onClick={this.openAddNewDialog} className="nav-button">
+				<FloatingActionButton mini={true} onClick={this.props.openAddNew} className="nav-button">
 					<ContentAdd />
 				</FloatingActionButton>
-				<Dialog title="Add New Site"
-						actions={dialogActions}
-						open={this.state.addNewIsOpen}
-						contentStyle={{ maxWidth: '500px' }}
-						onRequestClose={(buttonClicked) => { if (!buttonClicked) this.cancelAddNew(); }}>
-					<TextField fullWidth={true}
-							   id="urlInput"
-							   type="url"
-							   floatingLabelText="URL" 
-							   hintText="https://www.example.org" 
-							   onChange={this.addNewUrlChanged}></TextField>
-				</Dialog>
 			</Card>
 		)
 	}

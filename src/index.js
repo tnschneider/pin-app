@@ -63,7 +63,7 @@ if (isSecondInstance) {
 
 const createWindow = () => {
 	const getIconPath = (px) => {
-		return path.join(__dirname, `${isProd ? '.' : '../assets'}/appicon${px}.png`);
+		return path.join(__dirname, `${isProd ? '.' : '../assets'}/icon${px}.png`);
 	}
 
 	mainWindow = new BrowserWindow({

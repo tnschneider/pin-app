@@ -8,11 +8,28 @@ const Tray = electron.Tray;
 const path = require('path');
 const url = require('url');
 
-const {
-	default: installExtension, 
-	REACT_DEVELOPER_TOOLS, 
-	REDUX_DEVTOOLS
-} = require('electron-devtools-installer');
+const isProd = process.env.NODE_ENV !== 'development';
+
+let installDevTools = () => { console.log("Not installing devtools in production."); };
+
+if (!isProd) {
+	const {
+		default: installExtension, 
+		REACT_DEVELOPER_TOOLS, 
+		REDUX_DEVTOOLS
+	} = require('electron-devtools-installer');
+	
+	installDevTools = () => {
+		installExtension(REACT_DEVELOPER_TOOLS)
+			.then((name) => console.log(`Added Extension:  ${name}`))
+			.catch((err) => console.log('An error occurred: ', err));
+
+		installExtension(REDUX_DEVTOOLS)
+			.then((name) => console.log(`Added Extension:  ${name}`))
+			.catch((err) => console.log('An error occurred: ', err));
+	}	
+}
+
 
 const Datastore = require('nedb');
 
@@ -20,9 +37,11 @@ const Repository = require('./core/repository.js');
 const Constants = require('./core/constants.js');
 const { IpcServer } = require('./core/ipc.js');
 
+const getUserDataPath = (filePath) => path.join(app.getPath('userData'), filePath);
+
 const db = {
-	sites: new Datastore({ filename: Constants.DB_FILENAME_SITES, autoload: true }),
-	settings: new Datastore({ filename: Constants.DB_FILENAME_SETTINGS, autoload: true })
+	sites: new Datastore({ filename: getUserDataPath(Constants.DB_FILENAME_SITES), autoload: true }),
+	settings: new Datastore({ filename: getUserDataPath(Constants.DB_FILENAME_SETTINGS), autoload: true })
 };
 
 const repo = new Repository(db);
@@ -31,17 +50,20 @@ const _ = new IpcServer(repo);
 
 let mainWindow;
 
-function createWindow() {
+const createWindow = () => {
+	const getIconPath = (px) => {
+		return path.join(__dirname, `${isProd ? '.' : '../assets'}/appicon${px}.png`);
+	}
 
 	mainWindow = new BrowserWindow({
 		width: 1024, 
 		height: 768,
 		title: "Pin App",
-		icon: './appicon256.png'
+		icon: getIconPath(256)
 	});
 
 	var tray = null;
-	tray = new Tray('./appicon64.png');
+	tray = new Tray(getIconPath(64));
 	var contextMenu = Menu.buildFromTemplate([
 			{ label: 'Quit', click: () => {
 				app.isQuitting = true;
@@ -55,24 +77,20 @@ function createWindow() {
 	})
 
 	mainWindow.loadURL(url.format({
-		pathname: path.join(__dirname, './main/index.html'),
+		pathname: path.join(__dirname, './index.html'),
 		protocol: 'file:',
 		slashes: true,
 	}));
 
-  	if(process.env.NODE_ENV === 'development') {
+  	if(!isProd) {
 
 		mainWindow.webContents.openDevTools();
 		
-		installExtension(REACT_DEVELOPER_TOOLS)
-			.then((name) => console.log(`Added Extension:  ${name}`))
-			.catch((err) => console.log('An error occurred: ', err));
-
-		installExtension(REDUX_DEVTOOLS)
-			.then((name) => console.log(`Added Extension:  ${name}`))
-			.catch((err) => console.log('An error occurred: ', err));
+		installDevTools();
 
 	}
+
+	
 
 	//hide the app to the tray on minimize
 	mainWindow.on('minimize',function(event){

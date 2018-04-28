@@ -9,7 +9,7 @@ import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import { remote } from 'electron';
-import { Site } from '../../../core/models.js';
+import { Site } from 'core/models.js';
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 

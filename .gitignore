@@ -1,8 +1,7 @@
 #directories
-bower_components
 node_modules
 dist
-build
+build-assets
 data
 .vscode/
 
@@ -10,3 +9,4 @@ data
 *.tgz
 *.log
 package-lock.json
+yarn.lock

@@ -50,6 +50,17 @@ const _ = new IpcServer(repo);
 
 let mainWindow;
 
+const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+	if (mainWindow) {
+	  	if (mainWindow.isMinimized()) mainWindow.restore()
+	  	mainWindow.focus()
+	}
+})
+  
+if (isSecondInstance) {
+	app.quit()
+}
+
 const createWindow = () => {
 	const getIconPath = (px) => {
 		return path.join(__dirname, `${isProd ? '.' : '../assets'}/appicon${px}.png`);

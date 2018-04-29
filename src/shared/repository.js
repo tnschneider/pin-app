@@ -6,9 +6,22 @@ class Repository {
         this.settings = db.settings;
     }
 
+    getMaxSortOrder() {
+        return new Promise((resolve, reject) => {
+            this.pages.find({}, { sortOrder: 1 }).sort({ sortOrder: -1 }).limit(1).exec((err, page) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    let result = (page && page.length === 1 ? page[0].sortOrder : 0) || 0;
+                    resolve(result);
+                }
+            });
+        })
+    }
+
     getPages() {
         return new Promise((resolve, reject) => {
-            this.pages.find({}, (err, pages) => {
+            this.pages.find({}).sort({ sortOrder: 1 }).exec((err, pages) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -21,12 +34,15 @@ class Repository {
 
     addPage(page) {
         return new Promise((resolve, reject) => {
-            this.pages.insert(new Page(page), (err, newPage) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(new Page(newPage));
-                }
+            this.getMaxSortOrder().then(max => {
+                page.sortOrder = max + 1;
+                this.pages.insert(new Page(page), (err, newPage) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(new Page(newPage));
+                    }
+                });
             });
         });
     }

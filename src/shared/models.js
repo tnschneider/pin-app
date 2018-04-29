@@ -4,6 +4,7 @@ class Page {
     constructor(props) {
         this.id = props.id || props._id;
         this.url = props.url;
+        this.sortOrder = props.sortOrder;
     }
 
     hostname() {

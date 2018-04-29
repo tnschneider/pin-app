@@ -1,8 +1,7 @@
 #directories
 node_modules
 dist
-build-assets
-data
+build
 .vscode/
 
 #files

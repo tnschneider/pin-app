@@ -14,6 +14,7 @@ export const SET_ACTIVE_PAGE_ID = 'SET_ACTIVE_PAGE_ID';
 export const SET_ACTIVE_PAGE_BY_INDEX = 'SET_ACTIVE_PAGE_BY_INDEX';
 export const ACTIVE_PAGE_INCR = 'ACTIVE_PAGE_INCR';
 export const ACTIVE_PAGE_DECR = 'ACTIVE_PAGE_DECR';
+export const SET_SORT_ORDER = 'SET_SORT_ORDER';
 
 
 //action creators
@@ -49,4 +50,10 @@ export function activePageIncrement() {
 
 export function activePageDecrement() {
 	return actionResult(ACTIVE_PAGE_DECR);
+}
+
+export function setSortOrder(sortOrder) {
+	IpcClient.setSortOrder(sortOrder);
+
+	return actionResult(SET_SORT_ORDER, sortOrder);
 }

@@ -8,11 +8,11 @@ class Repository {
 
     getMaxSortOrder() {
         return new Promise((resolve, reject) => {
-            this.pages.find({}, { sortOrder: 1 }).sort({ sortOrder: -1 }).limit(1).exec((err, page) => {
+            this.pages.find({}).sort({ sortOrder: -1 }).limit(1).exec((err, page) => {
                 if (err) {
                     reject(err);
                 } else {
-                    let result = (page && page.length === 1 ? page[0].sortOrder : 0) || 0;
+                    let result = (page && page.length === 1 ? page[0].sortOrder : -1);
                     resolve(result);
                 }
             });
@@ -69,6 +69,33 @@ class Repository {
                 }
             });
         })
+    }
+
+    updatePageSortOrder(id, sortOrder) {
+        return new Promise((resolve, reject) => {
+            this.pages.update({ _id: id }, { $set: { sortOrder: sortOrder } }, (err, numReplaced) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(numReplaced);
+                }
+            });
+        });
+    }
+
+    setSortOrder(sortOrder) {
+        let promises = [];
+        return new Promise((resolve, reject) => {
+            Object.keys(sortOrder).forEach(x => {
+                promises.push(this.updatePageSortOrder(x, sortOrder[x]));
+            });
+
+            Promise.all(promises).then(x => {
+                resolve(true);
+            }, err => {
+                reject(err);
+            });
+        });
     }
 
     getSettings() {

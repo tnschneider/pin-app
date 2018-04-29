@@ -20,8 +20,8 @@ const getAppResources = (isProd) => {
 const getAppPlugins = (isProd) => {
 	const copyToDistAssets = (from, subdir) => ({
 		from: from,
-		to: subdir ? path.join(__dirname, './build-assets', subdir)
-				   : path.join(__dirname, './build-assets')
+		to: subdir ? path.join(__dirname, './build', subdir)
+				   : path.join(__dirname, './build')
 	});
 
     let result = [
@@ -63,7 +63,7 @@ module.exports = (env) => {
 			}
 		},
 		output: {
-			path: path.resolve(__dirname, './build-assets'),
+			path: path.resolve(__dirname, './build'),
 			filename: 'bundle.js',
 			publicPath: isProd ? '/' : 'http://localhost:8080/'
 		},

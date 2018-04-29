@@ -5,7 +5,8 @@ import { ADD_PAGE,
 		 SET_ACTIVE_PAGE_BY_INDEX,
 		 ACTIVE_PAGE_INCR,
 		 ACTIVE_PAGE_DECR, 
-         UPDATE_PAGE_URL} from '../actions/pagesActions.js';
+		 UPDATE_PAGE_URL,
+		 SET_SORT_ORDER } from '../actions/pagesActions.js';
 
 const pages = IpcClient.getPages();
 
@@ -76,6 +77,16 @@ export default function(state = INITIAL_STATE, action) {
 			}
 
 			return state;
+
+		case SET_SORT_ORDER:
+			const sortOrders = action.payload;
+
+			Object.keys(sortOrders).forEach(x => {
+				let page = state.pages.find(page => page.id === x);
+				if (page) page.sortOrder = sortOrders[x];
+			});
+
+			return updateState({ pages: state.pages });
 
 		default:
 			return state;

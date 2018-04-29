@@ -1,6 +1,8 @@
 {
   "name": "safety-pin",
-  "version": "0.0.2",
+  "author": "Terry Schneider",
+  "version": "1.0.0",
+  "license": "MIT",
   "description": "Keep a list of quick reference web pages always open.",
   "scripts": {
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js --env.production\" \"cross-env NODE_ENV=development electron ./src/app.js\"",

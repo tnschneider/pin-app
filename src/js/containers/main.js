@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPages, addPage, setActivePageId, 
 		 deletePage, updatePageUrl, setActivePageByIndex, 
-		 activePageIncrement, activePageDecrement } from '../actions/pagesActions.js';
+		 activePageIncrement, activePageDecrement,
+		 setSortOrder } from '../actions/pagesActions.js';
 import { Link } from 'react-router-dom';
 import LeftNav from '../components/leftNav.js';
 import TopNav from '../components/topNav.js';
@@ -111,7 +112,8 @@ class Main extends Component {
 							setActivePageId={this.props.setActivePageId}
 							addPage={this.props.addPage}
 							deletePage={this.props.deletePage} 
-							openAddNew={this.openAddNewDialog}/>
+							openAddNew={this.openAddNewDialog}
+							setSortOrder={this.props.setSortOrder}/>
 
 					<TopNav activePageBack={this.activePageBack}
 							activePageRefresh={this.activePageRefresh}
@@ -157,7 +159,8 @@ let mapDispatch = dispatch => {
 		updatePageUrl: (id, url) => { dispatch(updatePageUrl(id, url)) },
 		setActivePageByIndex: (index) => { dispatch(setActivePageByIndex(index)) },
 		activePageIncrement: () => { dispatch(activePageIncrement()) },
-		activePageDecrement: () => { dispatch(activePageDecrement()) }
+		activePageDecrement: () => { dispatch(activePageDecrement()) },
+		setSortOrder: (sortOrder) => { dispatch(setSortOrder(sortOrder)) }
 	};
 }
 

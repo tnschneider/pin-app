@@ -8,7 +8,8 @@ const MessageTypes = {
     GET_APP_SETTINGS: 'GET_APP_SETTINGS',
     SET_APP_SETTINGS: 'SET_APP_SETTINGS',
     PATCH_APP_SETTINGS: 'PATCH_APP_SETTINGS',
-    UPDATE_PAGE_URL: 'UPDATE_PAGE_URL'
+    UPDATE_PAGE_URL: 'UPDATE_PAGE_URL',
+    SET_SORT_ORDER: 'SET_SORT_ORDER'
 }
 
 class IpcServer {
@@ -29,6 +30,10 @@ class IpcServer {
 
         ipcMain.on(MessageTypes.UPDATE_PAGE_URL, async (event, payload) => {
             event.returnValue = await this.repo.updatePageUrl(payload.id, payload.url);
+        });
+
+        ipcMain.on(MessageTypes.SET_SORT_ORDER, async (event, sortOrder) => {
+            event.returnValue = await this.repo.setSortOrder(sortOrder);
         });
     
         ipcMain.on(MessageTypes.GET_APP_SETTINGS, async (event) => {
@@ -60,6 +65,10 @@ const IpcClient = {
 
     updatePageUrl: (id, url) => {
         return IpcClient._send(MessageTypes.UPDATE_PAGE_URL, { id, url });
+    },
+
+    setSortOrder: (sortOrder) => {
+        return IpcClient._send(MessageTypes.SET_SORT_ORDER, { sortOrder });
     },
 
     getAppSettings: () => {

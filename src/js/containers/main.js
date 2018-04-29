@@ -79,7 +79,7 @@ class Main extends Component {
 				}
 
 				Promise.all(promises).then(x => {
-					this.props.addPage(new Page({url: url, faviconSrc: faviconSrc }));
+					this.props.addPage(new Page({url: url, faviconSrc: faviconSrc, shouldUpdateUrlOnNavigate: true}));
 
 					this.setState({ addNewUrl: null, addNewIsOpen: false, addNewLoading: false });
 				})

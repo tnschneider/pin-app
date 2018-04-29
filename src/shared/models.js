@@ -5,7 +5,7 @@ class Page {
         this._id = props._id;
         this.url = props.url;
         this.sortOrder = props.sortOrder;
-        this.shouldUpdateUrlOnNavigate = props.shouldUpdateUrlOnNavigate || true;
+        this.shouldUpdateUrlOnNavigate = props.shouldUpdateUrlOnNavigate;
         this.faviconSrc = props.faviconSrc;
     }
 

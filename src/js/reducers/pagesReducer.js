@@ -6,7 +6,8 @@ import { ADD_PAGE,
 		 ACTIVE_PAGE_INCR,
 		 ACTIVE_PAGE_DECR, 
 		 UPDATE_PAGE_URL,
-		 SET_SORT_ORDER } from '../actions/pagesActions.js';
+		 SET_SORT_ORDER,
+		 UPDATE_PAGE_SHOULD_UPDATE_URL } from '../actions/pagesActions.js';
 
 const pages = IpcClient.getPages();
 
@@ -22,6 +23,7 @@ export default function(state = INITIAL_STATE, action) {
 	const getActivePageIndex = () => oldState.pages.findIndex(x => x.id === oldState.activePageId);
 
 	let index;
+	let updatedPage;
 
 	switch(action.type) {
 		case ADD_PAGE:
@@ -39,8 +41,14 @@ export default function(state = INITIAL_STATE, action) {
 			});
 
 		case UPDATE_PAGE_URL:
-			let updatedPage = state.pages.find(x => x.id === action.payload.id);
-			if (updatedPage) updatedPage.url == action.payload.url;
+			updatedPage = state.pages.find(x => x.id === action.payload.id);
+			if (updatedPage) updatedPage.url = action.payload.url;
+
+			return updateState({ pages: state.pages });
+
+		case UPDATE_PAGE_SHOULD_UPDATE_URL:
+			updatedPage = state.pages.find(x => x.id === action.payload.id);
+			if (updatedPage) updatedPage.shouldUpdateUrlOnNavigate = action.payload.shouldUpdate;
 
 			return updateState({ pages: state.pages });
 			  

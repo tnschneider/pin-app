@@ -71,6 +71,18 @@ class Repository {
         })
     }
 
+    updatePageShouldUpdateUrl(id, shouldUpdate) {
+        return new Promise((resolve, reject) => {
+            this.pages.update({ _id: id }, { $set: { shouldUpdateUrlOnNavigate: shouldUpdate } }, (err, numReplaced) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(numReplaced);
+                }
+            });
+        })
+    }
+
     updatePageSortOrder(id, sortOrder) {
         return new Promise((resolve, reject) => {
             this.pages.update({ _id: id }, { $set: { sortOrder: sortOrder } }, (err, numReplaced) => {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getPages, addPage, setActivePageId, 
 		 deletePage, updatePageUrl, setActivePageByIndex, 
 		 activePageIncrement, activePageDecrement,
-		 setSortOrder } from '../actions/pagesActions.js';
+		 setSortOrder, updatePageShouldUpdateUrl } from '../actions/pagesActions.js';
 import { Link } from 'react-router-dom';
 import LeftNav from '../components/leftNav.js';
 import TopNav from '../components/topNav.js';
@@ -14,6 +14,7 @@ import { buildHandlers } from '../components/shortcutProvider.js';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 class Main extends Component {
 	constructor(props) {
@@ -21,6 +22,7 @@ class Main extends Component {
 
 		this.state = {
 			addNewIsOpen: false,
+			addNewLoading: false,
 			addNewUrl: null
 		}
 		
@@ -48,18 +50,48 @@ class Main extends Component {
 		}
 
 		this.doAddNew = () => {
+			if (this.state.addNewLoading || !this.state.addNewUrl) return;
+
+			this.setState({ addNewLoading: true });
+
 			let url = this.state.addNewUrl;
+			let hostAndPath;
 
 			if (!url.includes("://")) {
+				hostAndPath = url;	
 				url = `https://${url}`;
+			} else {
+				hostAndPath = url.split("://")[1];
 			}
 
-			this.props.addPage(new Page({url: url}));
+			const fetchUrl = `https://favicongrabber.com/api/grab/${hostAndPath}`;
 
-			this.setState({ addNewUrl: null, addNewIsOpen: false });
+			fetch(fetchUrl).then(response => {
+				let faviconSrc;
+
+				var promises = [];
+				if (response.status === 200) {
+					promises.push(response.json().then(model => {
+						if (model.icons && model.icons.length > 0) {
+							faviconSrc = model.icons[0].src;
+						}
+					}));
+				}
+
+				Promise.all(promises).then(x => {
+					this.props.addPage(new Page({url: url, faviconSrc: faviconSrc }));
+
+					this.setState({ addNewUrl: null, addNewIsOpen: false, addNewLoading: false });
+				})
+				
+			});
+
+			
 		}
 
 		this.cancelAddNew = () => {
+			if (this.state.addNewLoading) return;
+
 			this.setState({ addNewUrl: null, addNewIsOpen: false });
 		}
 
@@ -88,10 +120,19 @@ class Main extends Component {
 				this.doAddNew();
 			}
 		}
+		
+		this.getPageById = (pageId) => {
+			return this.props.pages.find(x => x.id === pageId);
+		}
 
 		this.handlePageNavigated = (pageId, url) => {
-			this.props.updatePageUrl(pageId, url);
+			const page = this.getPageById(pageId);
+			if (page && page.shouldUpdateUrlOnNavigate) {
+				this.props.updatePageUrl(pageId, url);
+			};
 		}
+
+		
 	}
 
 	render() {
@@ -100,12 +141,12 @@ class Main extends Component {
 		}
 
 		const dialogActions = [
-			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} />,
-			<FlatButton label="Add" secondary={true} onClick={this.doAddNew} />
+			<FlatButton label="Cancel" primary={true} onClick={this.cancelAddNew} disabled={this.state.addNewLoading} />,
+			<FlatButton label="Add" secondary={true} onClick={this.doAddNew} disabled={this.state.addNewLoading || !this.state.addNewUrl} />
 		];
 
 		return(
-			<div>
+			<div onDrop={this.handleFileDrop}>
 				<Shortcuts name='PAGES' handler={this.handleShortcuts}>
 					<LeftNav pages={this.props.pages} 
 							activePageId={this.props.activePageId} 
@@ -113,7 +154,8 @@ class Main extends Component {
 							addPage={this.props.addPage}
 							deletePage={this.props.deletePage} 
 							openAddNew={this.openAddNewDialog}
-							setSortOrder={this.props.setSortOrder}/>
+							setSortOrder={this.props.setSortOrder}
+							updatePageShouldUpdateUrl={this.props.updatePageShouldUpdateUrl}/>
 
 					<TopNav activePageBack={this.activePageBack}
 							activePageRefresh={this.activePageRefresh}
@@ -137,6 +179,9 @@ class Main extends Component {
 							   hintText="https://www.example.org" 
 							   onChange={this.addNewUrlChanged}
 							   onKeyDown={this.handleAddNewKeyDown}></TextField>
+					<CircularProgress size={120} thickness={7} 
+									  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', visibility: this.state.addNewLoading ? 'visible' : 'hidden' }}
+									  innerStyle={{ position: 'absolute', top: 'calc(50% - 60px)', left: 'calc(50% - 60px)' }}/>
 				</Dialog>
 			</div>
 		)
@@ -157,6 +202,7 @@ let mapDispatch = dispatch => {
 		setActivePageId: (id) => { dispatch(setActivePageId(id)) },
 		deletePage: (id) => { dispatch(deletePage(id)) },
 		updatePageUrl: (id, url) => { dispatch(updatePageUrl(id, url)) },
+		updatePageShouldUpdateUrl: (id, shouldUpdate) => { dispatch(updatePageShouldUpdateUrl(id, shouldUpdate)) },
 		setActivePageByIndex: (index) => { dispatch(setActivePageByIndex(index)) },
 		activePageIncrement: () => { dispatch(activePageIncrement()) },
 		activePageDecrement: () => { dispatch(activePageDecrement()) },

@@ -18,23 +18,40 @@ class LeftNav extends Component{
 		super(props);
 
 		this.state = {
-			pageIdToDelete: null,
 			pageButtonOffset: 0,
 			sortOrders: {}
 		}
 
-		this.contextMenu = new Menu();
-		this.contextMenu.append(new MenuItem({ label: 'Delete', click: () => { this.props.deletePage(this.state.pageIdToDelete); } }));
+		this.getContextMenu = (pageId) => {
+			let page = this.props.pages.find(x => x.id === pageId);
+			let contextMenu = new Menu();
+
+			contextMenu.append(new MenuItem({ 
+				label: 'Delete', 
+				click: () => { this.props.deletePage(page.id); } 
+			}));
+
+			contextMenu.append(new MenuItem({ 
+				label: 'Update URL on navigation',
+				type: 'checkbox',
+				checked: !!page.shouldUpdateUrlOnNavigate,
+				click: () => { 
+					this.props.updatePageShouldUpdateUrl(pageId, !page.shouldUpdateUrlOnNavigate);
+				} 
+			}));
+
+			return contextMenu;
+		}
+		
 
 		window.addEventListener('contextmenu', (e) => {
 			var pageId = e.target.getAttribute("data-page-id");
 
 			if (pageId) {
-				this.setState({pageIdToDelete: pageId}, () => {
-					e.preventDefault();
-					this.contextMenu.popup(remote.getCurrentWindow());
-				});
+				e.preventDefault();
+				this.getContextMenu(pageId).popup(remote.getCurrentWindow());
 			}
+			
 		}, false);
 
 		this.pageButtonPixels = () => this.props.pages.length * 48;
@@ -117,7 +134,11 @@ class LeftNav extends Component{
 															  onClick={() => { this.props.setActivePageId(page.id); }}
 															  data-page-id={page.id}
 															  className={`nav-button ${isActive ? 'active' : 'inactive' }`}>
-											<img src={ `https://api.statvoo.com/favicon/?url=${page.hostname()}` } data-page-id={page.id} />
+											<div data-page-id={page.id}>
+												<img style={{ height: '100%', width: 'auto' }} 
+													 src={ page.faviconUrl } 
+													 data-page-id={page.id}/>	
+											</div>
 										</FloatingActionButton>
 									</div>
 								)

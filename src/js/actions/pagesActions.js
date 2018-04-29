@@ -15,6 +15,7 @@ export const SET_ACTIVE_PAGE_BY_INDEX = 'SET_ACTIVE_PAGE_BY_INDEX';
 export const ACTIVE_PAGE_INCR = 'ACTIVE_PAGE_INCR';
 export const ACTIVE_PAGE_DECR = 'ACTIVE_PAGE_DECR';
 export const SET_SORT_ORDER = 'SET_SORT_ORDER';
+export const UPDATE_PAGE_SHOULD_UPDATE_URL = 'UPDATE_PAGE_SHOULD_UPDATE_URL';
 
 
 //action creators
@@ -34,6 +35,12 @@ export function updatePageUrl(id, url) {
 	IpcClient.updatePageUrl(id, url);
 
 	return actionResult(UPDATE_PAGE_URL, { id, url });
+}
+
+export function updatePageShouldUpdateUrl(id, shouldUpdate) {
+	IpcClient.updatePageShouldUpdateUrl(id, shouldUpdate);
+
+	return actionResult(UPDATE_PAGE_SHOULD_UPDATE_URL, { id, shouldUpdate });
 }
 
 export function setActivePageId(id) {

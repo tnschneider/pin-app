@@ -2,9 +2,13 @@ const url = require('url');
 
 class Page {
     constructor(props) {
-        this.id = props.id || props._id;
+        this._id = props._id;
         this.url = props.url;
         this.sortOrder = props.sortOrder;
+    }
+
+    get id() {
+        return this._id;
     }
 
     hostname() {

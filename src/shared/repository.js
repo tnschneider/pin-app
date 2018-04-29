@@ -8,11 +8,11 @@ class Repository {
 
     getMaxSortOrder() {
         return new Promise((resolve, reject) => {
-            this.pages.find({}, { sortOrder: 1 }).sort({ sortOrder: -1 }).limit(1).exec((err, page) => {
+            this.pages.find({}).sort({ sortOrder: -1 }).limit(1).exec((err, page) => {
                 if (err) {
                     reject(err);
                 } else {
-                    let result = (page && page.length === 1 ? page[0].sortOrder : -1) || -1;
+                    let result = (page && page.length === 1 ? page[0].sortOrder : -1);
                     resolve(result);
                 }
             });

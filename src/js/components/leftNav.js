@@ -60,6 +60,7 @@ class LeftNav extends Component{
 	handleSortOrderChanged(id, newIndex, oldIndex) {
 		const newOrder = {};
 		const oldOrder = this.state.sortOrders;
+
 		Object.keys(oldOrder).forEach(x => {
 			const o = oldOrder[x];
 			if (x === id) {
@@ -72,6 +73,7 @@ class LeftNav extends Component{
 				newOrder[x] = o;
 			}
 		});
+
 		this.props.setSortOrder(newOrder);
 	}
 	

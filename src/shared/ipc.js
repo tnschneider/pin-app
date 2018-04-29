@@ -68,7 +68,7 @@ const IpcClient = {
     },
 
     setSortOrder: (sortOrder) => {
-        return IpcClient._send(MessageTypes.SET_SORT_ORDER, { sortOrder });
+        return IpcClient._send(MessageTypes.SET_SORT_ORDER, sortOrder);
     },
 
     getAppSettings: () => {

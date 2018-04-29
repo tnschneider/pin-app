@@ -82,7 +82,7 @@ export default function(state = INITIAL_STATE, action) {
 			const sortOrders = action.payload;
 
 			Object.keys(sortOrders).forEach(x => {
-				let page = state.pages.find(page => page.id = x)
+				let page = state.pages.find(page => page.id === x);
 				if (page) page.sortOrder = sortOrders[x];
 			});
 

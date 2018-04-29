@@ -31,8 +31,9 @@ let mainWindow;
 
 const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
 	if (mainWindow) {
-	  	if (mainWindow.isMinimized()) mainWindow.restore()
-	  	mainWindow.focus()
+		if (!mainWindow.isVisible()) mainWindow.show();
+	  	if (mainWindow.isMinimized()) mainWindow.restore();
+	  	mainWindow.focus();
 	}
 })
   
